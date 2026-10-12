@@ -1,6 +1,7 @@
 package com.marketlab.ui.catalog
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,14 +23,28 @@ import com.marketlab.R
 import com.marketlab.data.model.ProductRepository
 
 @Composable
-fun CatalogScreen(modifier: Modifier = Modifier) {
-    Column(Modifier.fillMaxSize()) {
+fun CatalogScreen(modifier: Modifier = Modifier, openItem: (Int) -> Unit) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(12.dp)
+    ) {
+        Text(
+            text = "Catalog",
+            modifier = Modifier.fillMaxWidth(),
+            fontWeight = FontWeight.Bold,
+            fontSize = 32.sp
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         LazyColumn {
             items(ProductRepository.products.size) { index ->
                 ItemProduct(
                     modifier = modifier,
                     title = ProductRepository.products[index].title,
-                    price = ProductRepository.products[index].price
+                    price = ProductRepository.products[index].price,
+                    openItem = { (openItem(ProductRepository.products[index].id)) }
                 )
             }
         }
@@ -37,11 +52,14 @@ fun CatalogScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ItemProduct(modifier: Modifier, title: String, price: Double, imageUrl: String = "") {
+fun ItemProduct(modifier: Modifier, title: String, price: Double, openItem: () -> Unit) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(12.dp)
+            .padding(vertical = 8.dp)
+            .clickable(
+                onClick = { openItem() }
+            )
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_background),
@@ -66,5 +84,7 @@ fun ItemProduct(modifier: Modifier, title: String, price: Double, imageUrl: Stri
 @Preview(showSystemUi = true)
 @Composable
 fun CatalogScreenPreview(modifier: Modifier = Modifier) {
-    CatalogScreen()
+    CatalogScreen(
+        openItem = {}
+    )
 }
