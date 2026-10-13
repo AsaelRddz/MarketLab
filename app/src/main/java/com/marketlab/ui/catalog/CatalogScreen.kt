@@ -13,17 +13,22 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.marketlab.R
-import com.marketlab.data.model.ProductRepository
 
 @Composable
-fun CatalogScreen(modifier: Modifier = Modifier, openItem: (Int) -> Unit) {
+fun CatalogScreen(modifier: Modifier = Modifier, openItem: (Int) -> Unit, viewModel: CatalogViewModel = viewModel()) {
+    val products by viewModel.products.collectAsStateWithLifecycle()
+
     Column(
         Modifier
             .fillMaxSize()
@@ -39,12 +44,12 @@ fun CatalogScreen(modifier: Modifier = Modifier, openItem: (Int) -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn {
-            items(ProductRepository.products.size) { index ->
-                ItemProduct(
+            items(products.size) { index ->
+                ProductCard(
                     modifier = modifier,
-                    title = ProductRepository.products[index].title,
-                    price = ProductRepository.products[index].price,
-                    openItem = { (openItem(ProductRepository.products[index].id)) }
+                    title = products[index].title,
+                    price = products[index].price,
+                    openItem = { openItem((products[index].id)) }
                 )
             }
         }
@@ -52,7 +57,7 @@ fun CatalogScreen(modifier: Modifier = Modifier, openItem: (Int) -> Unit) {
 }
 
 @Composable
-fun ItemProduct(modifier: Modifier, title: String, price: Double, openItem: () -> Unit) {
+fun ProductCard(modifier: Modifier, title: String, price: Double, openItem: () -> Unit) {
     Row(
         modifier = modifier
             .fillMaxWidth()

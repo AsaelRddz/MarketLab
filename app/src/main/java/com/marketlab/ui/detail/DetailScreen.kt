@@ -8,20 +8,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.marketlab.data.model.ProductRepository
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.marketlab.data.repository.ProductRepository
+import com.marketlab.ui.catalog.CatalogViewModel
 
 @Composable
-fun DetailScreen(modifier: Modifier = Modifier, productId: Int?) {
+fun DetailScreen(modifier: Modifier = Modifier, productId: Int?, viewModel: CatalogViewModel = viewModel()) {
+    val products by viewModel.products.collectAsStateWithLifecycle()
+
     Column(modifier
         .fillMaxSize()
         .padding(12.dp)) {
 
-        val product = ProductRepository.products.find { it.id == productId } ?: return@Column
+        val product = products.find { it.id == productId } ?: return@Column
 
         Text(
             text = "Detail",
