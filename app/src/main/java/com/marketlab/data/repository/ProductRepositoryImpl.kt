@@ -1,10 +1,12 @@
 package com.marketlab.data.repository
 
-import com.marketlab.data.model.Product
+import com.marketlab.domain.model.Product
+import com.marketlab.domain.repository.ProductRepository
 
-class ProductRepository {
-    companion object {
-        val products = listOf(
+class ProductRepositoryImpl : ProductRepository {
+
+    override fun getProducts(): List<Product> {
+        return listOf(
             Product(
                 id = 1,
                 title = "Product 1",

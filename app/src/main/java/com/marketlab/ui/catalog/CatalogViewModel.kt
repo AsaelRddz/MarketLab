@@ -1,8 +1,9 @@
 package com.marketlab.ui.catalog
 
 import androidx.lifecycle.ViewModel
-import com.marketlab.data.model.Product
-import com.marketlab.data.repository.ProductRepository
+import com.marketlab.domain.model.Product
+import com.marketlab.data.repository.ProductRepositoryImpl
+import com.marketlab.domain.repository.ProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,6 +17,8 @@ class CatalogViewModel : ViewModel() {
     }
 
     fun getProducts() {
-        _products.value = ProductRepository.products
+        val repository: ProductRepository = ProductRepositoryImpl()
+        val products = repository.getProducts()
+        _products.value = products
     }
 }
