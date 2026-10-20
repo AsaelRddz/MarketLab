@@ -1,47 +1,28 @@
 package com.marketlab.data.repository
 
+import com.marketlab.data.remote.ProductApiService
 import com.marketlab.domain.model.Product
 import com.marketlab.domain.repository.ProductRepository
+import javax.inject.Inject
 
-class ProductRepositoryImpl : ProductRepository {
+class ProductRepositoryImpl @Inject constructor(
+    private val productApiService: ProductApiService
+) : ProductRepository {
 
-    override fun getProducts(): List<Product> {
-        return listOf(
+    /**
+     * .map transforma cada ProductResponse de la API en un Product, el modelo que usan tus pantallas.
+     */
+    override suspend fun getProducts(): List<Product> {
+        val response = productApiService.getAllProducts()
+
+        return response.products.map {
             Product(
-                id = 1,
-                title = "Product 1",
-                description = "Description for Product 1",
-                price = 10.99,
-                imageUrl = "https://example.com/product1.jpg"
-            ),
-            Product(
-                id = 2,
-                title = "Product 2",
-                description = "Description for Product 2",
-                price = 19.99,
-                imageUrl = "https://example.com/product2.jpg"
-            ),
-            Product(
-                id = 3,
-                title = "Product 3",
-                description = "Description for Product 3",
-                price = 5.99,
-                imageUrl = "https://example.com/product3.jpg"
-            ),
-            Product(
-                id = 4,
-                title = "Product 4",
-                description = "Description for Product 4",
-                price = 24.99,
-                imageUrl = "https://example.com/product4.jpg"
-            ),
-            Product(
-                id = 5,
-                title = "Product 5",
-                description = "Description for Product 5",
-                price = 8.99,
-                imageUrl = "https://example.com/product5.jpg"
+                id = it.id,
+                title = it.title,
+                description = it.description,
+                price = it.price,
+                imageUrl = it.thumbnail
             )
-        )
+        }
     }
 }

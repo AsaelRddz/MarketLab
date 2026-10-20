@@ -14,12 +14,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.marketlab.ui.catalog.CatalogViewModel
 
 @Composable
-fun DetailScreen(modifier: Modifier = Modifier, productId: Int?, viewModel: CatalogViewModel = viewModel()) {
+fun DetailScreen(modifier: Modifier = Modifier, productId: Int?, viewModel: CatalogViewModel = hiltViewModel()) {
     val products by viewModel.products.collectAsStateWithLifecycle()
 
     Column(modifier
