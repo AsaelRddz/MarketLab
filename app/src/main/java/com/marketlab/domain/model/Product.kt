@@ -1,4 +1,4 @@
-package com.marketlab.data.model
+package com.marketlab.domain.model
 
 data class Product(
     val id: Int,

@@ -1,13 +1,20 @@
 package com.marketlab.ui.catalog
 
 import androidx.lifecycle.ViewModel
-import com.marketlab.data.model.Product
-import com.marketlab.data.repository.ProductRepository
+import androidx.lifecycle.viewModelScope
+import com.marketlab.domain.model.Product
+import dagger.hilt.android.lifecycle.HiltViewModel
+import com.marketlab.domain.repository.ProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CatalogViewModel : ViewModel() {
+@HiltViewModel
+class CatalogViewModel @Inject constructor(
+    private val repository: ProductRepository
+) : ViewModel() {
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products: StateFlow<List<Product>> = _products.asStateFlow()
 
@@ -16,6 +23,8 @@ class CatalogViewModel : ViewModel() {
     }
 
     fun getProducts() {
-        _products.value = ProductRepository.products
+        viewModelScope.launch {
+            _products.value = repository.getProducts()
+        }
     }
 }
