@@ -8,7 +8,21 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-// Registra esta clase como un módulo de configuración de Hilt.
+/**
+ * Vincula ProductRepository con ProductRepositoryImpl para la inyección de dependencias.
+ *
+ * No llamamos a este módulo manualmente: Hilt procesa sus anotaciones durante la
+ * compilación y genera el código que conecta las dependencias. Por eso puede no
+ * aparecer en «buscar usos», aunque su vinculación se utiliza al crear el ViewModel.
+ * Sin esta vinculación (u otra equivalente), Hilt no podría proporcionar ProductRepository.
+ *
+ * Flujo de resolución:
+ * CatalogViewModel pide ProductRepository
+ *     ↓ RepositoryModule define la implementación
+ * ProductRepositoryImpl pide ProductApiService
+ *     ↓ NetworkModule proporciona el servicio
+ * ProductApiService
+ */
 @Module
 // Hace disponible esta vinculación en el contenedor de la aplicación.
 @InstallIn(SingletonComponent::class)

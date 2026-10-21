@@ -1,4 +1,4 @@
-package com.marketlab.ui.theme
+package com.marketlab.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

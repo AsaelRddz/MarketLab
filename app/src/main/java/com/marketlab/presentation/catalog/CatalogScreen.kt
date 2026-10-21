@@ -1,4 +1,4 @@
-package com.marketlab.ui.catalog
+package com.marketlab.presentation.catalog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

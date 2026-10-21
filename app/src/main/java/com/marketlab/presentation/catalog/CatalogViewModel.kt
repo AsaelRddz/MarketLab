@@ -1,4 +1,4 @@
-package com.marketlab.ui.catalog
+package com.marketlab.presentation.catalog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

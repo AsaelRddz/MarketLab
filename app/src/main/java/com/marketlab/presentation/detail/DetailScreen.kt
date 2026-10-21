@@ -1,4 +1,4 @@
-package com.marketlab.ui.detail
+package com.marketlab.presentation.detail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.marketlab.ui.catalog.CatalogViewModel
+import com.marketlab.presentation.catalog.CatalogViewModel
 
 @Composable
 fun DetailScreen(modifier: Modifier = Modifier, productId: Int?, viewModel: CatalogViewModel = hiltViewModel()) {

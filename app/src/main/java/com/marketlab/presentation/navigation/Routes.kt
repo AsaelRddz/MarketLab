@@ -1,4 +1,4 @@
-package com.marketlab.ui.navigation
+package com.marketlab.presentation.navigation
 
 import kotlinx.serialization.Serializable
 

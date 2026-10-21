@@ -1,12 +1,12 @@
-package com.marketlab.ui.navigation
+package com.marketlab.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.marketlab.ui.catalog.CatalogScreen
-import com.marketlab.ui.detail.DetailScreen
+import com.marketlab.presentation.catalog.CatalogScreen
+import com.marketlab.presentation.detail.DetailScreen
 
 @Composable
 fun MarketLabNavigation(modifier: Modifier = Modifier) {
