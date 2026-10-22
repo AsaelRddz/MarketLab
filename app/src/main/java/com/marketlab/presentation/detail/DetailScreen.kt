@@ -10,22 +10,49 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.marketlab.presentation.catalog.CatalogUiState
 import com.marketlab.presentation.catalog.CatalogViewModel
 
 @Composable
-fun DetailScreen(modifier: Modifier = Modifier, productId: Int?, viewModel: CatalogViewModel = hiltViewModel()) {
-    val products by viewModel.products.collectAsStateWithLifecycle()
+fun DetailScreen(
+    modifier: Modifier = Modifier,
+    productId: Int?,
+    viewModel: CatalogViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Column(modifier
-        .fillMaxSize()
-        .padding(12.dp)) {
+    Column(
+        modifier
+            .fillMaxSize()
+            .padding(12.dp)
+    ) {
 
+        if (uiState is CatalogUiState.Loading || uiState is CatalogUiState.Error) {
+            Spacer(modifier = modifier.weight(1f))
+            Text(
+                text = if (uiState is CatalogUiState.Loading) "Loading..." else
+                        (uiState as CatalogUiState.Error).errorMessage,
+                modifier = modifier.fillMaxWidth(),
+                fontWeight = FontWeight.Bold,
+                fontSize = 26.sp,
+                style = TextStyle(
+                    textAlign = TextAlign.Center
+                )
+            )
+            Spacer(modifier = modifier.weight(1f))
+
+            return@Column
+        }
+
+        val products = (uiState as? CatalogUiState.Success)?.products ?: emptyList()
         val product = products.find { it.id == productId } ?: return@Column
 
         Text(
@@ -55,7 +82,6 @@ fun DetailScreen(modifier: Modifier = Modifier, productId: Int?, viewModel: Cata
             modifier = modifier.fillMaxWidth(),
             fontSize = 16.sp
         )
-
 
 
     }

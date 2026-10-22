@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.marketlab.presentation.catalog.CatalogRoute
 import com.marketlab.presentation.catalog.CatalogScreen
 import com.marketlab.presentation.detail.DetailScreen
 
@@ -14,7 +15,7 @@ fun MarketLabNavigation(modifier: Modifier = Modifier) {
 
     NavHost(navController = navController, startDestination = Catalog, modifier = modifier) {
         composable<Catalog> {
-            CatalogScreen(
+            CatalogRoute(
                 openItem = { productId ->
                     navController.navigate(Detail(productId))
                 }
