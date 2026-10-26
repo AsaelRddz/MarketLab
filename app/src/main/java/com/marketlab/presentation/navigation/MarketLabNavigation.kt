@@ -1,12 +1,14 @@
-package com.marketlab.ui.navigation
+package com.marketlab.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.marketlab.ui.catalog.CatalogScreen
-import com.marketlab.ui.detail.DetailScreen
+import com.marketlab.presentation.catalog.CatalogRoute
+import com.marketlab.presentation.catalog.CatalogScreen
+import com.marketlab.presentation.detail.DetailRoute
+import com.marketlab.presentation.detail.DetailScreen
 
 @Composable
 fun MarketLabNavigation(modifier: Modifier = Modifier) {
@@ -14,7 +16,7 @@ fun MarketLabNavigation(modifier: Modifier = Modifier) {
 
     NavHost(navController = navController, startDestination = Catalog, modifier = modifier) {
         composable<Catalog> {
-            CatalogScreen(
+            CatalogRoute(
                 openItem = { productId ->
                     navController.navigate(Detail(productId))
                 }
@@ -23,7 +25,7 @@ fun MarketLabNavigation(modifier: Modifier = Modifier) {
 
         composable<Detail> { backStackEntry ->
             val productId = backStackEntry.arguments?.getInt("productId")
-            DetailScreen(productId = productId)
+            DetailRoute(productId = productId)
         }
     }
 }
