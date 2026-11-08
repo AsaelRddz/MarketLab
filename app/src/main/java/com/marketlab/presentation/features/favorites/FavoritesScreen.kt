@@ -1,105 +1,113 @@
-package com.marketlab.presentation.catalog
+package com.marketlab.presentation.features.favorites
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.marketlab.R
 import com.marketlab.domain.model.Product
-import com.marketlab.presentation.catalog.components.ProductCard
 import com.marketlab.presentation.components.ErrorContent
 import com.marketlab.presentation.components.LoadingContent
+import com.marketlab.presentation.components.ProductCard
 import com.marketlab.presentation.theme.MarketLabTheme
 
 @Composable
-fun CatalogRoute(openItem: (Int) -> Unit, viewModel: CatalogViewModel = hiltViewModel()) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+fun FavoritesRoute(viewModel: FavoritesViewModel = hiltViewModel(), openItem: (Int) -> Unit) {
+    val favoritesState by viewModel.favoritesState.collectAsStateWithLifecycle()
 
-    CatalogScreen(
-        uiState = uiState,
-        onRetry = viewModel::getProducts,
+    FavoritesScreen(
+        favoritesState = favoritesState,
+        onRetry = {
+            viewModel.observeFavorites()
+        },
         openItem = openItem
     )
 }
 
 @Composable
-fun CatalogScreen(uiState: CatalogUiState, onRetry: () -> Unit, openItem: (Int) -> Unit) {
-    when (val state = uiState) {
-        CatalogUiState.Loading -> LoadingContent()
-
-        is CatalogUiState.Error -> ErrorContent(
-            errorMessage = uiState.errorMessage,
+fun FavoritesScreen(
+    favoritesState: FavoriteUIState,
+    onRetry: () -> Unit,
+    openItem: (Int) -> Unit
+) {
+    when (val state = favoritesState) {
+        FavoriteUIState.Loading -> LoadingContent()
+        is FavoriteUIState.Error -> ErrorContent(
+            errorMessage = state.errorMessage,
             onRetry = onRetry
         )
 
-        is CatalogUiState.Success -> {
-            CatalogContent(
-                modifier = Modifier,
-                products = state.products,
-                openItem = openItem,
-            )
+        is FavoriteUIState.Success -> {
+            if (state.favorites.isNotEmpty()) {
+                FavoritesContent(
+                    modifier = Modifier,
+                    products = state.favorites,
+                    openItem = openItem
+                )
+            } else {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text("Aún no tienes favoritos.")
+                }
+            }
         }
     }
 }
 
-
 @Composable
-fun CatalogContent(
+fun FavoritesContent(
     modifier: Modifier = Modifier,
     products: List<Product>,
     openItem: (Int) -> Unit
 ) {
     Column(
-        Modifier
+        modifier
             .fillMaxSize()
             .padding(12.dp)
     ) {
         Text(
-            text = "Catalog",
-            modifier = Modifier.fillMaxWidth(),
+            text = "Favorites",
+            modifier = modifier.fillMaxWidth(),
             fontWeight = FontWeight.Bold,
             fontSize = 32.sp
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = modifier.height(16.dp))
 
         LazyColumn {
-            items(products.size) { index ->
+            items(items = products, key = { it.id }) { product ->
                 ProductCard(
                     modifier = modifier,
-                    title = products[index].title,
-                    price = products[index].price,
-                    openItem = { openItem((products[index].id)) }
+                    title = product.title,
+                    price = product.price,
+                    openItem = { openItem(product.id) }
                 )
             }
         }
     }
 }
 
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(showSystemUi = true)
 @Composable
-fun CatalogScreenPreview() {
-    // Datos locales para dibujar la pantalla sin Hilt, ViewModel ni conexión a internet.
+fun FavoritesScreenPreview() {
     val products = listOf(
         Product(
             id = 1,
@@ -118,11 +126,6 @@ fun CatalogScreenPreview() {
     )
 
     MarketLabTheme {
-        // Probamos el estado Success; los callbacks no realizan acciones en este preview.
-        CatalogScreen(
-            uiState = CatalogUiState.Success(products),
-            onRetry = {},
-            openItem = {}
-        )
+        FavoritesContent(products = products, openItem = {})
     }
 }

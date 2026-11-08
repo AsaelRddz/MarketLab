@@ -7,3 +7,6 @@ data object Catalog
 
 @Serializable
 data class Detail(val productId: Int)
+
+@Serializable
+data object Favorites

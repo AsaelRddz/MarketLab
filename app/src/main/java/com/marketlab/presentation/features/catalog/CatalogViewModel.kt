@@ -1,4 +1,4 @@
-package com.marketlab.presentation.catalog
+package com.marketlab.presentation.features.catalog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,9 +23,6 @@ class CatalogViewModel @Inject constructor(
     // Las pantallas pueden observar el estado, pero no modificarlo.
     val uiState: StateFlow<CatalogUiState> = _uiState.asStateFlow()
 
-    init {
-        getProducts()
-    }
 
     fun getProducts() {
         viewModelScope.launch {

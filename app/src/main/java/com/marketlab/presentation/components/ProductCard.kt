@@ -1,4 +1,4 @@
-package com.marketlab.presentation.catalog.components
+package com.marketlab.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.marketlab.R
 
 @Composable
-fun ProductCard(modifier: Modifier, title: String, price: Double, openItem: () -> Unit) {
+fun ProductCard(modifier: Modifier = Modifier, title: String, price: Double, openItem: () -> Unit) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -33,16 +33,16 @@ fun ProductCard(modifier: Modifier, title: String, price: Double, openItem: () -
             contentDescription = null
         )
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = modifier.width(16.dp))
 
-        Column(modifier = Modifier.weight(1f)) {
+        Column(modifier = modifier.weight(1f)) {
             Text(
                 title,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = modifier.fillMaxWidth(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = modifier.height(8.dp))
             Text("$$price", fontSize = 16.sp)
         }
     }

@@ -1,4 +1,4 @@
-package com.marketlab.presentation.catalog
+package com.marketlab.presentation.features.catalog
 
 import com.marketlab.domain.model.Product
 

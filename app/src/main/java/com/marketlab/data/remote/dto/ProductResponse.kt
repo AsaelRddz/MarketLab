@@ -1,4 +1,4 @@
-package com.marketlab.data.model
+package com.marketlab.data.remote.dto
 
 data class AllProductsResponse(
     val products: List<ProductResponse>,

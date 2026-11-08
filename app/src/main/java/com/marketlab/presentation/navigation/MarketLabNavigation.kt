@@ -5,10 +5,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.marketlab.presentation.catalog.CatalogRoute
-import com.marketlab.presentation.catalog.CatalogScreen
-import com.marketlab.presentation.detail.DetailRoute
-import com.marketlab.presentation.detail.DetailScreen
+import com.marketlab.presentation.features.catalog.CatalogRoute
+import com.marketlab.presentation.features.detail.DetailRoute
+import com.marketlab.presentation.features.favorites.FavoritesRoute
 
 @Composable
 fun MarketLabNavigation(modifier: Modifier = Modifier) {
@@ -19,6 +18,9 @@ fun MarketLabNavigation(modifier: Modifier = Modifier) {
             CatalogRoute(
                 openItem = { productId ->
                     navController.navigate(Detail(productId))
+                },
+                openFav = {
+                    navController.navigate(Favorites)
                 }
             )
         }
@@ -26,6 +28,14 @@ fun MarketLabNavigation(modifier: Modifier = Modifier) {
         composable<Detail> { backStackEntry ->
             val productId = backStackEntry.arguments?.getInt("productId")
             DetailRoute(productId = productId)
+        }
+
+        composable<Favorites> {
+            FavoritesRoute(
+                openItem = { productId ->
+                    navController.navigate(Detail(productId))
+                }
+            )
         }
     }
 }

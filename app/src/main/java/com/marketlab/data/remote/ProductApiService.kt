@@ -1,7 +1,7 @@
 package com.marketlab.data.remote
 
-import com.marketlab.data.model.AllProductsResponse
-import com.marketlab.data.model.ProductResponse
+import com.marketlab.data.remote.dto.AllProductsResponse
+import com.marketlab.data.remote.dto.ProductResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 
