@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.marketlab.data.local.MarketLabDatabase
 import com.marketlab.data.local.dao.FavoriteProductDao
+import com.marketlab.data.local.dao.ProductDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +29,11 @@ object DatabaseModule {
             MarketLabDatabase::class.java,
             "marketlab_database",
         ).build()
+    }
+
+    @Provides
+    fun provideProductDao(database: MarketLabDatabase) : ProductDao {
+        return database.productDao()
     }
 
     @Provides
