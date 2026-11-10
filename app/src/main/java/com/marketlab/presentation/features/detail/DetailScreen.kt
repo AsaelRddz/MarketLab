@@ -29,7 +29,7 @@ import com.marketlab.presentation.theme.MarketLabTheme
 
 
 @Composable
-fun DetailRoute(productId: Int?, viewModel: DetailViewModel = hiltViewModel()) {
+fun DetailRoute(viewModel: DetailViewModel = hiltViewModel(), productId: Int?) {
     LaunchedEffect(productId) {
         viewModel.getProductById(productId)
     }
@@ -45,7 +45,7 @@ fun DetailRoute(productId: Int?, viewModel: DetailViewModel = hiltViewModel()) {
             viewModel.toggleFavorite(productId)
         },
         onDismissMessageFavorite = viewModel::onDismissMessageFavorite,
-        onRetryListFav = {
+        onRetryFavorites = {
             productId?.let(viewModel::observeFavorites)
         }
     )
@@ -57,7 +57,7 @@ fun DetailScreen(
     onRetry: () -> Unit,
     clickFavorite: () -> Unit,
     onDismissMessageFavorite: () -> Unit,
-    onRetryListFav: () -> Unit,
+    onRetryFavorites: () -> Unit,
 ) {
     when (val state = detailState) {
         DetailUiState.Loading -> LoadingContent()
@@ -72,13 +72,13 @@ fun DetailScreen(
                 modifier = Modifier,
                 product = state.product,
                 isFavorite = state.isFavorite,
-                enabledFavorite = !state.isUpdatingFavorite && state.favoriteReadState == FavoriteReadState.Ready,
+                isFavoriteActionEnabled = !state.isUpdatingFavorite && state.favoriteReadState == FavoriteReadState.Ready,
                 favoriteReadState = state.favoriteReadState,
-                onRetryListFav = onRetryListFav,
+                onRetryFavorites = onRetryFavorites,
                 clickFavorite = clickFavorite
             )
 
-            val message = state.favoritesObservationError ?: state.messageFavorite
+            val message = state.favoritesObservationError ?: state.favoriteMessage
 
             message?.let {
                 NoticeDialog(
@@ -95,9 +95,9 @@ fun DetailContent(
     modifier: Modifier,
     product: Product,
     isFavorite: Boolean,
-    enabledFavorite: Boolean,
+    isFavoriteActionEnabled: Boolean,
     favoriteReadState: FavoriteReadState,
-    onRetryListFav: () -> Unit,
+    onRetryFavorites: () -> Unit,
     clickFavorite: () -> Unit
 ) {
     Column(
@@ -137,27 +137,27 @@ fun DetailContent(
 
         if (favoriteReadState == FavoriteReadState.Error){
             TextButton({
-                onRetryListFav()
+                onRetryFavorites()
             }) {
-                Text("Reintentar carga favoritos")
+                Text("Retry loading favorites")
             }
         }  else if (favoriteReadState == FavoriteReadState.Loading) {
-            Text("Consultando favoritos...")
+            Text("Loading favorites...")
         }
 
         Spacer(modifier.height(6.dp))
 
         Button(
             onClick = clickFavorite,
-            enabled = enabledFavorite,
+            enabled = isFavoriteActionEnabled,
             modifier = modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
-            val text = if (isFavorite) "Eliminar" else "Guardar"
-            Text("$text favorito")
+            val text = if (isFavorite) "Remove from favorites" else "Add to favorites"
+            Text(text)
         }
     }
 }
@@ -167,8 +167,8 @@ fun DetailContent(
 fun DetailScreenPreview() {
     val product = Product(
         id = 1,
-        title = "Mochila urbana",
-        description = "Mochila para uso diario",
+        title = "Urban backpack",
+        description = "Backpack for everyday use",
         price = 599.0,
         imageUrl = ""
     )
@@ -179,7 +179,7 @@ fun DetailScreenPreview() {
             onRetry = {},
             clickFavorite = {},
             onDismissMessageFavorite = {},
-            onRetryListFav = {}
+            onRetryFavorites = {}
         )
     }
 }

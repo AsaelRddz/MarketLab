@@ -42,7 +42,7 @@ class FavoritesViewModel @Inject constructor(
                 throw exception
             } catch (exception: Exception) {
                 _favoritesState.value = FavoriteUIState.Error(
-                    "No se pudieron cargar los favoritos. Inténtalo de nuevo."
+                    "Could not load favorites. Please try again."
                 )
             }
         }

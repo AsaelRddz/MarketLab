@@ -29,7 +29,7 @@ class DetailViewModel @Inject constructor(
     fun getProductById(productId: Int?) {
         // Un ID ausente o inválido no debe dejar la pantalla cargando indefinidamente.
         if (productId == null || productId <= 0) {
-            _detailState.value = DetailUiState.Error("El ID del producto no es válido.")
+            _detailState.value = DetailUiState.Error("The product ID is invalid.")
             return
         }
 
@@ -45,12 +45,12 @@ class DetailViewModel @Inject constructor(
                 observeFavorites(productId)
             } catch (exception: IOException) {
                 _detailState.value = DetailUiState.Error(
-                    "No se pudo cargar el producto. Revisa tu conexión."
+                    "Could not load the product. Check your connection."
                 )
             } catch (exception: HttpException) {
                 // El servidor respondió con un código HTTP de error.
                 _detailState.value = DetailUiState.Error(
-                    "El servidor no pudo completar la solicitud. Inténtalo de nuevo."
+                    "The server could not complete the request. Please try again."
                 )
             }
         }
@@ -85,7 +85,7 @@ class DetailViewModel @Inject constructor(
                     _detailState.update { state ->
                         if (state is DetailUiState.Success && state.product.id == productId) {
                             state.copy(
-                                favoritesObservationError = "No se pudieron consultar los favoritos.",
+                                favoritesObservationError = "Could not load favorites.",
                                 favoriteReadState = FavoriteReadState.Error
                             )
                         } else {
@@ -140,7 +140,7 @@ class DetailViewModel @Inject constructor(
                     if (state is DetailUiState.Success && state.product.id == product.id) {
                         state.copy(
                             isFavorite = true,
-                            messageFavorite = "Se guardó correctamente el favorito."
+                            favoriteMessage = "Added to favorites."
                         )
                     } else {
                         state
@@ -152,7 +152,7 @@ class DetailViewModel @Inject constructor(
                         state.product.id == product.id
                     ) {
                         state.copy(
-                            messageFavorite = "No se pudo guardar el favorito."
+                            favoriteMessage = "Could not add to favorites."
                         )
                     } else {
                         state
@@ -173,7 +173,7 @@ class DetailViewModel @Inject constructor(
                     if (state is DetailUiState.Success && state.product.id == product.id) {
                         state.copy(
                             isFavorite = false,
-                            messageFavorite = "Se removió correctamente el favorito."
+                            favoriteMessage = "Removed from favorites."
                         )
                     } else {
                         state
@@ -185,7 +185,7 @@ class DetailViewModel @Inject constructor(
                         state.product.id == product.id
                     ) {
                         state.copy(
-                            messageFavorite = "No se pudo remover el favorito."
+                            favoriteMessage = "Could not remove from favorites."
                         )
                     } else {
                         state
@@ -212,7 +212,7 @@ class DetailViewModel @Inject constructor(
     fun onDismissMessageFavorite() {
         _detailState.update { state ->
             if (state is DetailUiState.Success) {
-                state.copy(messageFavorite = null, favoritesObservationError = null)
+                state.copy(favoriteMessage = null, favoritesObservationError = null)
             } else {
                 state
             }

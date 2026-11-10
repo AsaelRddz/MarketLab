@@ -21,13 +21,13 @@ fun ErrorContent(modifier: Modifier = Modifier, errorMessage: String, onRetry: (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Error, vuelve a intentarlo")
+        Text("Something went wrong. Please try again.")
         Text(errorMessage, color = Color.Gray, textAlign = TextAlign.Center)
 
         Spacer(modifier = modifier.height(6.dp))
 
         Button(onRetry) {
-            Text("Reintentar")
+            Text("Retry")
         }
     }
 }

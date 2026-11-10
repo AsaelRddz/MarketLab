@@ -65,7 +65,7 @@ fun FavoritesScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text("Aún no tienes favoritos.")
+                    Text("You don’t have any favorites yet.")
                 }
             }
         }
@@ -111,21 +111,25 @@ fun FavoritesScreenPreview() {
     val products = listOf(
         Product(
             id = 1,
-            title = "Mochila urbana",
-            description = "Mochila para uso diario",
+            title = "Urban backpack",
+            description = "Backpack for everyday use",
             price = 599.0,
             imageUrl = ""
         ),
         Product(
             id = 2,
-            title = "Audífonos inalámbricos",
-            description = "Audífonos con estuche de carga",
+            title = "Wireless earbuds",
+            description = "Earbuds with charging case",
             price = 899.5,
             imageUrl = ""
         ),
     )
 
     MarketLabTheme {
-        FavoritesContent(products = products, openItem = {})
+        FavoritesScreen(
+            favoritesState = FavoriteUIState.Success(products),
+            onRetry = {},
+            openItem = {}
+        )
     }
 }

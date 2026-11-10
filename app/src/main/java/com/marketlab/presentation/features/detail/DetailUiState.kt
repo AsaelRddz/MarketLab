@@ -8,7 +8,7 @@ sealed class DetailUiState {
         val product: Product,
         val isFavorite: Boolean = false,
         val isUpdatingFavorite: Boolean = false,
-        val messageFavorite: String? = null,
+        val favoriteMessage: String? = null,
         val favoriteReadState: FavoriteReadState = FavoriteReadState.Loading,
         val favoritesObservationError: String? = null
     ) : DetailUiState()

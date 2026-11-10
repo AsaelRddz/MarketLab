@@ -9,11 +9,11 @@ import androidx.compose.runtime.Composable
 fun NoticeDialog(message: String, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = { },
-        title = { Text("Aviso") },
+        title = { Text("Notice") },
         text = { Text(message) },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("Aceptar")
+                Text("OK")
             }
         }
     )

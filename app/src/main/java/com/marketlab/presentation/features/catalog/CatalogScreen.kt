@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,13 +29,14 @@ import com.marketlab.domain.model.Product
 import com.marketlab.presentation.components.ProductCard
 import com.marketlab.presentation.components.ErrorContent
 import com.marketlab.presentation.components.LoadingContent
+import com.marketlab.presentation.components.SearchContent
 import com.marketlab.presentation.theme.MarketLabTheme
 
 @Composable
 fun CatalogRoute(
-    openItem: (Int) -> Unit,
     viewModel: CatalogViewModel = hiltViewModel(),
-    openFav: () -> Unit
+    openItem: (Int) -> Unit,
+    onOpenFavorites: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.getProducts()
@@ -44,7 +48,7 @@ fun CatalogRoute(
         uiState = uiState,
         onRetry = viewModel::getProducts,
         openItem = openItem,
-        openFav = openFav
+        onOpenFavorites = onOpenFavorites
     )
 }
 
@@ -53,7 +57,7 @@ fun CatalogScreen(
     uiState: CatalogUiState,
     onRetry: () -> Unit,
     openItem: (Int) -> Unit,
-    openFav: () -> Unit
+    onOpenFavorites: () -> Unit
 ) {
     when (val state = uiState) {
         CatalogUiState.Loading -> LoadingContent()
@@ -68,19 +72,20 @@ fun CatalogScreen(
                 modifier = Modifier,
                 products = state.products,
                 openItem = openItem,
-                openFav = openFav
+                onOpenFavorites = onOpenFavorites
             )
         }
     }
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatalogContent(
     modifier: Modifier = Modifier,
     products: List<Product>,
     openItem: (Int) -> Unit,
-    openFav: () -> Unit
+    onOpenFavorites: () -> Unit
 ) {
     Column(
         modifier
@@ -96,12 +101,26 @@ fun CatalogContent(
 
         Spacer(modifier = modifier.height(16.dp))
 
+        val searchState = rememberSearchBarState()
+        val textState = rememberTextFieldState()
+
+        // Conserva las coincidencias; si el texto está vacío, contains("") acepta todos.
+        val filteredProducts = products.filter {
+            it.title.contains(textState.text, ignoreCase = true)
+                    || it.price.toString().contains(textState.text)
+        }
+        SearchContent(modifier = modifier, searchState, textState)
+
+        Spacer(modifier = modifier.height(16.dp))
+
+        if (filteredProducts.isEmpty()) Text("No products found")
+
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            items(items = products, key = { it.id }) { product ->
+            items(items = filteredProducts, key = { it.id }) { product ->
                 ProductCard(
                     modifier = modifier,
                     title = product.title,
@@ -114,14 +133,14 @@ fun CatalogContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         Button(
-            onClick = openFav,
+            onClick = onOpenFavorites,
             modifier = modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
-            Text("Ver favoritos")
+            Text("View favorites")
         }
     }
 }
@@ -133,15 +152,15 @@ fun CatalogScreenPreview() {
     val products = listOf(
         Product(
             id = 1,
-            title = "Mochila urbana",
-            description = "Mochila para uso diario",
+            title = "Urban backpack",
+            description = "Backpack for everyday use",
             price = 599.0,
             imageUrl = ""
         ),
         Product(
             id = 2,
-            title = "Audífonos inalámbricos",
-            description = "Audífonos con estuche de carga",
+            title = "Wireless earbuds",
+            description = "Earbuds with charging case",
             price = 899.5,
             imageUrl = ""
         ),
@@ -153,7 +172,7 @@ fun CatalogScreenPreview() {
             uiState = CatalogUiState.Success(products),
             onRetry = {},
             openItem = {},
-            openFav = {}
+            onOpenFavorites = {}
         )
     }
 }

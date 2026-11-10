@@ -19,7 +19,7 @@ fun MarketLabNavigation(modifier: Modifier = Modifier) {
                 openItem = { productId ->
                     navController.navigate(Detail(productId))
                 },
-                openFav = {
+                onOpenFavorites = {
                     navController.navigate(Favorites)
                 }
             )

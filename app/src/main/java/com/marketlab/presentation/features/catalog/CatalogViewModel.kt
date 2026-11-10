@@ -36,12 +36,12 @@ class CatalogViewModel @Inject constructor(
             } catch (exception: IOException) {
                 // Incluye fallos de conexión, DNS y tiempos de espera.
                 _uiState.value = CatalogUiState.Error(
-                    "No se pudieron cargar los productos. Revisa tu conexión."
+                    "Could not load products. Check your connection."
                 )
             } catch (exception: HttpException) {
                 // El servidor respondió con un código HTTP de error.
                 _uiState.value = CatalogUiState.Error(
-                    "El servidor no pudo completar la solicitud. Inténtalo de nuevo."
+                    "The server could not complete the request. Please try again."
                 )
             }
         }
