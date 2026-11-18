@@ -15,12 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
 import com.marketlab.domain.model.Product
 import com.marketlab.presentation.components.ErrorContent
 import com.marketlab.presentation.components.LoadingContent
@@ -110,6 +112,15 @@ fun DetailContent(
             modifier = modifier.fillMaxWidth(),
             fontWeight = FontWeight.Bold,
             fontSize = 32.sp
+        )
+
+        AsyncImage(
+            model = product.imageUrl,
+            contentDescription = product.title,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(240.dp),
+            contentScale = ContentScale.Fit
         )
 
         Spacer(modifier = modifier.height(16.dp))

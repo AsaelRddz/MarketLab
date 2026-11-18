@@ -98,6 +98,7 @@ fun FavoritesContent(
                     modifier = modifier,
                     title = product.title,
                     price = product.price,
+                    imageUrl = product.imageUrl,
                     openItem = { openItem(product.id) }
                 )
             }
